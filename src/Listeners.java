@@ -1,12 +1,16 @@
 package src;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 public class Listeners implements ActionListener, WindowListener {
-
     PasswordEncryptApp passEncryptApp;
     public Listeners(PasswordEncryptApp passEncryptApp) {
         this.passEncryptApp = passEncryptApp;
@@ -16,11 +20,18 @@ public class Listeners implements ActionListener, WindowListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==passEncryptApp.btnSubmit)
         {
-            PasswordMethods passwordMethods = new PasswordMethods();
-            String EncryptedPassword = passwordMethods.getEncryptedPassword(passEncryptApp.txtInput.getText(),passEncryptApp.txtKey.getText());
+            String EncryptedPassword = getEncryptedPassword();
             passEncryptApp.txtOutput.setText(EncryptedPassword);
-        }
+/*            System.out.println(EncryptedPassword);
 
+            try {
+                DecryptedPassword = passwordMethods.getDecryptedPassword(EncryptedPassword, passEncryptApp.txtKey.getText());
+            } catch (NoSuchPaddingException | NoSuchAlgorithmException | IllegalBlockSizeException |
+                     InvalidKeyException | BadPaddingException ex) {
+                throw new RuntimeException(ex);
+            }
+            System.out.println(DecryptedPassword);*/
+        }
         if(e.getSource()==passEncryptApp.btnReset)
         {
             passEncryptApp.txtInput.setText("");
@@ -29,14 +40,25 @@ public class Listeners implements ActionListener, WindowListener {
         }
     }
 
+    private String getEncryptedPassword() {
+        PasswordMethods passwordMethods = new PasswordMethods();
+        String EncryptedPassword = null;
+        String DecryptedPassword = null;
+        try {
+            EncryptedPassword = passwordMethods.getEncryptedPassword(passEncryptApp.txtInput.getText(),passEncryptApp.txtKey.getText());
+        } catch (NoSuchPaddingException | NoSuchAlgorithmException | IllegalBlockSizeException |
+                 BadPaddingException | InvalidKeyException ex) {
+            throw new RuntimeException(ex);
+        }
+        return EncryptedPassword;
+    }
+
     @Override
     public void windowOpened(WindowEvent e) {
-
     }
 
     @Override
     public void windowClosing(WindowEvent e) {
-
     }
 
     @Override
@@ -46,48 +68,17 @@ public class Listeners implements ActionListener, WindowListener {
 
     @Override
     public void windowIconified(WindowEvent e) {
-
     }
 
     @Override
     public void windowDeiconified(WindowEvent e) {
-
     }
 
     @Override
     public void windowActivated(WindowEvent e) {
-
     }
 
     @Override
     public void windowDeactivated(WindowEvent e) {
-
     }
-
-
-//        btnSubmit.addActionListener(new void ActionListener() {
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            PasswordMethods passwordMethods = new PasswordMethods();
-//            String EncryptedPassword = passwordMethods.getEncryptedPassword(txtInput.getText(),txtKey.getText());
-//            txtOutput.setText(EncryptedPassword);
-//        }
-//    });
-//
-//                btnReset.addActionListener(new ActionListener() {
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            txtInput.setText("");
-//            txtKey.setText("");
-//            txtOutput.setText("");
-//        }
-//    });
-//
-//        jFrame.addWindowListener(new WindowAdapter() {
-//        @Override
-//        public void windowClosing(WindowEvent e) {
-//            System.exit(0);
-//        }
-//    });
-
 }

@@ -3,10 +3,13 @@ package src;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
 import javax.swing.*;
 
 public class PasswordEncryptApp {
+
+    public static void main(String[] args) {
+        new PasswordEncryptApp();
+    }
 
     public JFrame jFrame;
     public Button btnSubmit,btnReset;
@@ -17,16 +20,17 @@ public class PasswordEncryptApp {
     {
         jFrame = new JFrame("Password Encryption Tool");
 
-        jFrame.setSize(500,500);
+        jFrame.setSize(350,250);
         jFrame.setLayout(new FlowLayout());
         jFrame.setVisible(true);
+
 
         btnSubmit = new Button("Submit");
         btnReset = new Button("Reset");
 
-        txtInput = new JTextField(10);
-        txtKey = new JTextField(10);
-        txtOutput = new JTextField(10);
+        txtInput = new JTextField(15);
+        txtKey = new JTextField(15);
+        txtOutput = new JTextField(15);
 
         labelInput = new JLabel("Input : ");
         labelKey = new JLabel("Key : ");
@@ -34,29 +38,35 @@ public class PasswordEncryptApp {
 
         jFrame.setLayout(new FlowLayout());
 
-        jFrame.add(labelInput);
-        jFrame.add(txtInput);
-        jFrame.add(labelKey);
-        jFrame.add(txtKey);
-        jFrame.add(labelOutput);
-        jFrame.add(txtOutput);
-        jFrame.add(btnSubmit);
-        jFrame.add(btnReset);
+            // Created Panel here
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(4, 1)); // Layout with 3 rows and 1 column
 
+            // Added all the required component into the panel as per the require order
+        panel.add(labelInput);
+        panel.add(txtInput);
+        panel.add(labelKey);
+        panel.add(txtKey);
+        panel.add(labelOutput);
+        panel.add(txtOutput);
+        panel.add(btnSubmit);
+        panel.add(btnReset);
+
+            // Added panel into Jframe window
+        jFrame.add(panel, BorderLayout.CENTER);
+
+            //Sending object of this App class to the Listeners class
         Listeners listeners = new Listeners(this);
+
         btnSubmit.addActionListener(listeners);
         btnReset.addActionListener(listeners);
         jFrame.addWindowListener(listeners);
-
+            //To stop execution when users click on close sign.
         jFrame.addWindowListener(new WindowAdapter() {
         @Override
         public void windowClosing(WindowEvent e) {
             System.exit(0);
         }
     });
-    }
-
-    public static void main(String[] args) {
-        new PasswordEncryptApp();
     }
 }
